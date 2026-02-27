@@ -1,0 +1,8 @@
+import { Admin } from "../entities/Admin";
+
+export interface IAdminRepository {
+    findByUsername(username: string): Promise<Admin | null>
+    create(admin: Admin): Promise<Admin>;
+    
+    
+}
