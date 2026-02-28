@@ -4,10 +4,10 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "../../../infrastructure/di/types";
 import { AdminController } from "../../controllers/admin/AdminController";
 import { SurveyController } from "../../controllers/survey/SurveyController";
-import { validateBody } from "../../middlewares/validationMiddleware"; 
+import { validateBody } from "../../middlewares/validationMiddleware";
 import { LoginSchema } from "../../../application/dto/admin/LoginDTO";
 import { UpdateSurveySchema } from "../../../application/dto/survey/UpdateSurveyDTO";
-import { authMiddileware } from "../../middlewares/authMiddileware"; 
+import { authMiddileware } from "../../middlewares/authMiddileware";
 import { ROUTES } from "../../../config/routes";
 
 @injectable()
@@ -27,6 +27,17 @@ export class AdminRoutes {
             ROUTES.ADMIN.LOGIN,
             validateBody(LoginSchema),
             this._adminController.login
+        );
+
+        this.router.post(
+            ROUTES.ADMIN.LOGOUT,
+            this._adminController.logout
+        );
+
+        this.router.get(
+            ROUTES.ADMIN.ME,
+            authMiddileware,
+            this._adminController.me
         );
 
         this.router.get(

@@ -1,28 +1,22 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 interface AuthState {
-    token: string | null;
-    isAuthenticated: boolean
+    isAuthenticated: boolean;
 }
 
 const initialState: AuthState = {
-    token: localStorage.getItem('adminToken'),
-    isAuthenticated: !!localStorage.getItem('adminToken')
+    isAuthenticated: false,
 }
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        loginSuccess: (state, action: PayloadAction<string>) => {
-            state.token = action.payload;
+        loginSuccess: (state) => {
             state.isAuthenticated = true;
-            localStorage.setItem('adminToken', action.payload);
         },
         logout: (state) => {
-            state.token = null;
             state.isAuthenticated = false;
-            localStorage.removeItem('adminToken')
         }
     }
 });

@@ -7,4 +7,13 @@ export const authService = {
         const response = await api.post(API_ROUTES.AUTH.LOGIN, credentials);
         return response.data;
     },
+    logout: async () => {
+        const response = await api.post(API_ROUTES.AUTH.LOGOUT);
+        return response.data;
+    },
+    me: async () => {
+        const response = await api.get(API_ROUTES.AUTH.ME);
+        return response.data;
+    },
 };
+

@@ -7,6 +7,8 @@ export const env = {
     JWT_SECRET: process.env.JWT_SECRET as string,
     JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '1d',
     CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    COOKIE_MAX_AGE: parseInt(process.env.COOKIE_MAX_AGE || '86400000'), // 24h in ms
+    NODE_ENV: process.env.NODE_ENV || 'development',
     WINDOW_MS: 15 * 60 * 1000,
     MAX: 10,
 }

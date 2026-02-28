@@ -7,6 +7,8 @@ export const ROUTES = {
 export const API_ROUTES = {
   AUTH: {
     LOGIN: '/admin/login',
+    LOGOUT: '/admin/logout',
+    ME: '/admin/me',
   },
   SURVEYS: {
     PUBLIC: '/surveys',

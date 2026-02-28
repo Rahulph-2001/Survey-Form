@@ -1,5 +1,9 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { ROUTES } from './config/routes';
+import { authService } from './services/authService';
+import { loginSuccess } from './store/slices/authSlice';
 import Navbar from './components/common/Navbar';
 import PrivateRoute from './components/auth/PrivateRoute';
 
@@ -7,6 +11,7 @@ import PrivateRoute from './components/auth/PrivateRoute';
 import SurveyFormPage from './pages/SurveyFormPage';
 import LoginPage from './pages/LoginPage';
 import SubmissionsPage from './pages/SubmissionsPage';
+
 
 const NotFoundPage = () => (
   <div className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] text-center p-8">
@@ -17,6 +22,16 @@ const NotFoundPage = () => (
 );
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    authService.me()
+      .then(() => dispatch(loginSuccess()))
+      .catch(() => {
+        // Not authenticated — leave isAuthenticated as false
+      });
+  }, [dispatch]);
+
   return (
     <Router>
       <div className="min-h-screen flex flex-col pt-[72px]">

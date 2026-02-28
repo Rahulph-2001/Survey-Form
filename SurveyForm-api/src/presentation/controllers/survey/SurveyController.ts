@@ -14,6 +14,10 @@ const PaginationQuerySchema = z.object({
   search: z.string().optional().default(''),
 });
 
+interface BotFlagResult {
+  bot: boolean;
+}
+
 @injectable()
 export class SurveyController {
   constructor(
@@ -29,7 +33,7 @@ export class SurveyController {
     try {
       const result = await this._createSurveyUseCase.execute(req.body);
 
-      if (result && (result as any).bot) {
+      if (result && typeof result === 'object' && 'bot' in result && (result as BotFlagResult).bot) {
         res.status(HttpStatusCode.CREATED).json({ success: true, message: SUCCESS_MESSAGES.SURVEY.CREATED });
         return;
       }
@@ -53,3 +57,4 @@ export class SurveyController {
     }
   }
 }
+

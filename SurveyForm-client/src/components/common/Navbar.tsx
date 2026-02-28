@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { type RootState } from '../../store';
 import { logout } from '../../store/slices/authSlice';
+import { authService } from '../../services/authService';
 import { ROUTES } from '../../config/routes';
 
 const Navbar = () => {
@@ -9,7 +10,12 @@ const Navbar = () => {
     const navigate = useNavigate();
     const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        try {
+            await authService.logout();
+        } catch {
+            // Ignore server errors — local logout proceeds regardless
+        }
         dispatch(logout());
         navigate(ROUTES.LOGIN);
     };

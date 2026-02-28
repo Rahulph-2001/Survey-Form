@@ -4,30 +4,30 @@ import { TYPES } from '../../infrastructure/di/types';
 import { ITokenService } from '../../domain/services/ITokenService';
 import { UnauthorizedError } from '../../domain/errors/AppError';
 import { ERROR_MESSAGES } from '../../config/messages';
+import { AdminTokenPayload } from '../../domain/types/AdminTokenPayload';
 
 declare global {
     namespace Express {
         interface Request {
-            admin?: any
+            admin?: AdminTokenPayload
         }
     }
 }
 
 export const authMiddileware = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith('Bearer')) {
-            throw new UnauthorizedError(ERROR_MESSAGES.SYSTEM.UNAUTHORIZED)
+        const token = req.cookies?.adminToken as string | undefined;
+        if (!token) {
+            throw new UnauthorizedError(ERROR_MESSAGES.SYSTEM.UNAUTHORIZED);
         }
-        const token = authHeader.split(' ')[1]
-        const tokenService = container.get<ITokenService>(TYPES.ITokenService);
 
+        const tokenService = container.get<ITokenService>(TYPES.ITokenService);
         const decoded = tokenService.verifyToken(token);
         req.admin = decoded;
 
-        next()
+        next();
 
     } catch (error) {
-        next(new UnauthorizedError(ERROR_MESSAGES.SYSTEM.UNAUTHORIZED))
+        next(new UnauthorizedError(ERROR_MESSAGES.SYSTEM.UNAUTHORIZED));
     }
 };

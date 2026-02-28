@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
 import { authSchema, type AuthFormData } from '../validation/authSchema';
 import { FormField } from '../components/form/FormField';
 import { authService } from '../services/authService';
@@ -27,14 +28,15 @@ export const LoginPage = () => {
     const onSubmit = async (data: AuthFormData) => {
         try {
             setIsLoading(true);
-            const response = await authService.login(data);
-            dispatch(loginSuccess(response.data.token));
+            await authService.login(data);
+            dispatch(loginSuccess());
             navigate(ROUTES.SUBMISSIONS);
-        } catch (error: any) {
-            setToast({
-                message: error.response?.data?.message || 'Invalid credentials',
-                type: 'error',
-            });
+        } catch (error: unknown) {
+            const message =
+                axios.isAxiosError(error) && error.response?.data?.message
+                    ? (error.response.data as { message: string }).message
+                    : 'Invalid credentials';
+            setToast({ message, type: 'error' });
         } finally {
             setIsLoading(false);
         }

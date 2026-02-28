@@ -7,6 +7,8 @@ export const ROUTES = {
     ADMIN: {
         BASE: '/admin',
         LOGIN: '/login',
+        LOGOUT: '/logout',
+        ME: '/me',
         SURVEYS: '/surveys',
         SURVEY_BY_ID: '/surveys/:id',
     },

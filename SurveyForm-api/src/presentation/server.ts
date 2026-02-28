@@ -2,6 +2,7 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { env } from '../config/env';
 import { errorHandler } from './middlewares/errorHandlerMiddileware';
 import { container } from '../infrastructure/di/container';
@@ -32,10 +33,12 @@ export class Server {
         this.app.use(cors({
             origin: corsOrigin,
             methods: ['GET', 'POST', 'PUT', 'DELETE'],
-            allowedHeaders: ['Content-Type', 'Authorization']
+            allowedHeaders: ['Content-Type'],
+            credentials: true,
         }));
 
         this.app.use(express.json());
+        this.app.use(cookieParser());
     }
 
     private setupRoutes(): void {
